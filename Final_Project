@@ -1,0 +1,82 @@
+# STAT-400-Final-Project
+```{r}
+rm(list = ls())
+library(tidyverse)
+library(Stat2Data)
+library(nnet)
+library(ggplot2)
+library(lme4)
+
+baseball <- read.csv("~/Downloads/baseballstats.csv")
+```
+
+# Research question: Based on ERA, Batting Average, and Runs, can we predict if a team had a winning season?
+
+## Data Wrangling
+```{r}
+baseball <-
+  baseball %>%
+  filter(yearID >= 1973) %>%
+  mutate(WinPct = (W / G)) %>%
+  mutate(BA = (H / AB))
+
+baseball <-
+  baseball %>%
+  mutate(above500 = ifelse(WinPct > 0.5, "1", "0"))
+
+baseball <-
+  baseball %>%
+  mutate(above500 = factor(above500))
+
+head(baseball)
+```
+
+First, we created a variable called "WinPct" by dividing the number of wins a team had (W) by the total number of games they played (G) to find the toal win percentage a team had. We then created a variable called "BA," which stands for Batting Average, by dividing the number of hits by the number of at bats for a team. After these variables were created, we then mutated the "WinPct" variable to create a binomial variable called "above500." This variable takes on a value of 1 if the win percentage is greater than 0.500. After this variable was created, we turned it into a factor.
+
+## EDA
+```{r}
+ggplot(data = baseball, mapping = aes(x = above500, y = R)) +
+  geom_boxplot(color = "blue") +
+  labs(x = "Win Percentage Above 0.500, where 1 = Yes and 0 = No", y = "Number of Runs")
+```
+
+Based on the boxplots shown, the number of runs for teams with a win percentage above 0.500 has a higher mean and less outliers than that of teams with a win percentage lower than 0.500. There are many outliers present in both boxplots.
+
+```{r}
+ggplot(data = baseball, mapping = aes(x = above500, y = ERA)) +
+  geom_boxplot(color = "purple") +
+  labs(x = "Win Percentage Above 0.500, where 1 = Yes and 0 = No")
+```
+
+Based on the boxplots shown, the ERA for teams with a win percentage higher than 0.500 has a lower mean than that of teams with a win percentage below 0.500. There are outliers present in both boxplots, but the distributions look similar in shape.
+
+
+```{r}
+ggplot(data = baseball, mapping = aes(x = above500, y = BA)) +
+  geom_boxplot(color = "red") +
+  labs(x = "Win Percentage Above 0.500, where 1 = Yes and 0 = No", y = "Batting Average")
+```
+
+Based on the boxplots, the batting average for teams with a win percentage above 0.500 has a higher mean and larger range than that of teams with a win percentage below 0.500. There are multiple outliers present in both distributions.
+
+## GLM
+
+```{r}
+model <- glm(above500 ~ ERA + BA + R, family = binomial, data = baseball)
+summary(model)
+```
+
+Based on the GLM, each of the terms -- ERA, Batting Average, and Runs -- is significant in predicting whether or not a team had a winning season. Each of the three terms has a p-value of <2e-16, which is extremely small, and makes the terms very significant in the model. 
+
+ERA is called Earned Run Average, which describes the number of earned runs that a pitcher gives up in nine innings. This value is extremely important in predicting whether or not a team had a winning season. The lower the ERA value, the better for the team; it means they gave up less runs to their opponents compared to other teams, which makes it more likely that they won more games.
+
+Batting Average describes the percentage of hits that a team gets out of the amount of times they were up at bat. A value of 0.3 is considered to be an excellent batting average, so these teams were getting more hits while they were up at bat, making it more likely for that team to have won their game.
+
+Runs describes the amount of runs a team achieves during a game. The player must pass first, second, third, and then return home, giving their team a score. The more amount of runs a team scores in a season, the more likely they are to win the games that they are playing, therefore more likely to have a winning season.
+
+
+
+
+
+
+
