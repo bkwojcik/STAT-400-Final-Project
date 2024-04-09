@@ -74,9 +74,38 @@ Batting Average describes the percentage of hits that a team gets out of the amo
 
 Runs describes the amount of runs a team achieves during a game. The player must pass first, second, third, and then return home, giving their team a score. The more amount of runs a team scores in a season, the more likely they are to win the games that they are playing, therefore more likely to have a winning season.
 
+## Multilevel Modeling
 
+# Research question: Does the association between League (National League or not) and ERA differ based on Division (West or not)?
 
+Response variable: ERA
 
+Level 1 observational units: Year
+Level 2 observational units: Team
+
+Level 1 variables: Wins, Losses, HR, Runs, Batting Average, WinPct
+Level 2 variables: Franchise ID, Division ID
+
+Fixed Effect: IsNL (IsNL = 1 for NL, 0 for AL), IsWest (IsWest = 1 for West Division, 0 for East or Central)
+Random Effect: team
+
+Decided not to include interaction due to insignificance
+
+```{r}
+baseball2 <-
+  baseball %>%
+  mutate(IsNL = ifelse(lgID == "NL", 1, 0)) %>%
+  mutate(IsNL = as.factor(IsNL)) %>%
+  mutate(IsWest = ifelse(divID == "W", 1, 0))
+
+model2 <- lmer(ERA ~ IsNL + IsWest + (1 + IsWest | teamID), REML = TRUE, data = baseball2)
+summary(model2)
+```
+
+```{r}
+ggplot(data = baseball2, mapping = aes(x = ERA, y = divID)) +
+  geom_boxplot()
+```
 
 
 
