@@ -66,7 +66,7 @@ model <- glm(above500 ~ ERA + BA + R, family = binomial, data = baseball)
 summary(model)
 ```
 
-Based on the GLM, each of the terms -- ERA, Batting Average, and Runs -- is significant in predicting whether or not a team had a winning season. Each of the three terms has a p-value of <2e-16, which is extremely small, and makes the terms very significant in the model. 
+Based on the GLM, each of the terms -- ERA, Batting Average, and Runs -- is significant in predicting whether or not a team had a winning season. Both the ERA and Runs variable have p-values of <2e-16, which is extremely small, and makes the terms very significant in the model. Batting Average has a p-value of 8.44e-16, which is still extremely small. 
 
 ERA is called Earned Run Average, which describes the number of earned runs that a pitcher gives up in nine innings. This value is extremely important in predicting whether or not a team had a winning season. The lower the ERA value, the better for the team; it means they gave up less runs to their opponents compared to other teams, which makes it more likely that they won more games.
 
