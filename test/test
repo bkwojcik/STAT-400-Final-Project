@@ -1,1 +1,14 @@
 test
+setnames(height_weight, old = c("Height(Inches)", "Weight(Pounds)"), new = c("Height", "Weight"), skip_absent = TRUE)
+library(ggplot2)
+
+# Plotting height distribution
+ggplot(height_weight, aes(x = Height)) + 
+  geom_histogram(binwidth = 5, fill = "skyblue", color = "black") + 
+  labs(title = "Height Distribution", x = "Height")
+
+# Plotting weight distribution
+ggplot(height_weight, aes(x = Weight)) + 
+  geom_histogram(binwidth = 5, fill = "lightgreen", color = "black") + 
+  labs(title = "Weight Distribution", x = "Weight")
+
