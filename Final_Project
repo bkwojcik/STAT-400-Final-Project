@@ -31,7 +31,7 @@ baseball <-
 head(baseball)
 ```
 
-First, we created a variable called "WinPct" by dividing the number of wins a team had (W) by the total number of games they played (G) to find the toal win percentage a team had. We then created a variable called "BA," which stands for Batting Average, by dividing the number of hits by the number of at bats for a team. After these variables were created, we then mutated the "WinPct" variable to create a binomial variable called "above500." This variable takes on a value of 1 if the win percentage is greater than 0.500. After this variable was created, we turned it into a factor.
+First, we filtered the yearID variable to years from 1973 and on. This is because in 1973, the designated hitter was introduced into the MLB and is still being used today, so we determined it was the most accurate of the data. We created a variable called "WinPct" by dividing the number of wins a team had (W) by the total number of games they played (G) to find the total win percentage a team had. We then created a variable called "BA," which stands for Batting Average, by dividing the number of hits by the number of at bats for a team. After these variables were created, we then mutated the "WinPct" variable to create a binomial variable called "above500." This variable takes on a value of 1 if the win percentage is greater than 0.500. After this variable was created, we turned it into a factor.
 
 ## EDA
 ```{r}
