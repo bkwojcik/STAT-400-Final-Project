@@ -108,4 +108,29 @@ ggplot(data = baseball2, mapping = aes(x = ERA, y = divID)) +
 ```
 
 
+#Scatterplot Matrix 
+pairs(~ ERA + IsNL + IsWest, data = baseball2)
+
+#Violin Plot 
+ggplot(data = baseball2, aes(x = IsNL, y = ERA, fill = IsWest)) +
+  geom_violin() +
+  labs(x = "League", y = "ERA", fill = "IsWest")
+
+#histogram 
+ggplot(data = baseball2, aes(x = ERA, fill = IsNL)) +
+  geom_histogram(binwidth = 0.5, alpha = 0.7, position = "identity") +
+  facet_wrap(~IsWest) +
+  labs(x = "ERA", fill = "League")
+
+#Boxplots 
+ggplot(data = baseball2, aes(x = divID, y = ERA, fill = IsNL)) +
+  geom_boxplot() +
+  labs(x = "Division", y = "ERA", fill = "League")
+
+#Density plot
+ggplot(data = baseball2, aes(x = ERA, fill = IsNL)) +
+  geom_density(alpha = 0.7) +
+  facet_wrap(~IsWest) +
+  labs(x = "ERA", fill = "League")
+
 
