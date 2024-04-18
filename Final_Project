@@ -98,7 +98,7 @@ baseball2 <-
   mutate(IsNL = as.factor(IsNL)) %>%
   mutate(IsWest = ifelse(divID == "W", 1, 0))
 
-model2 <- lmer(ERA ~ IsNL + IsWest + (1 + IsWest | teamID), REML = TRUE, data = baseball2)
+model2 <- lmer(ERA ~ IsNL + IsWest + (1 + IsWest | teamID), REML = FALSE, data = baseball2)
 summary(model2)
 ```
 
