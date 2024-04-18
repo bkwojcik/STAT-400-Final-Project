@@ -91,46 +91,55 @@ Random Effect: team
 
 Decided not to include interaction due to insignificance
 
+## Data Wrangling
+
 ```{r}
 baseball2 <-
   baseball %>%
   mutate(IsNL = ifelse(lgID == "NL", 1, 0)) %>%
   mutate(IsNL = as.factor(IsNL)) %>%
   mutate(IsWest = ifelse(divID == "W", 1, 0))
+```
 
-model2 <- lmer(ERA ~ IsNL + IsWest + (1 + IsWest | teamID), REML = FALSE, data = baseball2)
-summary(model2)
+## EDA
+
+```{r}
+ggplot(data = baseball2, mapping = aes(x = IsNL, y = ERA, fill = IsWest)) +
+  geom_violin() +
+  labs(x = "League", y = "ERA", fill = "IsWest")
 ```
 
 ```{r}
 ggplot(data = baseball2, mapping = aes(x = ERA, y = divID)) +
-  geom_boxplot()
+  geom_boxplot() +
+  labs(x = "ERA", y = "Division ID")
 ```
 
-
-#Scatterplot Matrix 
-pairs(~ ERA + IsNL + IsWest, data = baseball2)
-
-#Violin Plot 
-ggplot(data = baseball2, aes(x = IsNL, y = ERA, fill = IsWest)) +
-  geom_violin() +
-  labs(x = "League", y = "ERA", fill = "IsWest")
-
-#histogram 
+```{r}
 ggplot(data = baseball2, aes(x = ERA, fill = IsNL)) +
   geom_histogram(binwidth = 0.5, alpha = 0.7, position = "identity") +
   facet_wrap(~IsWest) +
   labs(x = "ERA", fill = "League")
+```
 
-#Boxplots 
+```{r}
 ggplot(data = baseball2, aes(x = divID, y = ERA, fill = IsNL)) +
   geom_boxplot() +
   labs(x = "Division", y = "ERA", fill = "League")
+```
 
-#Density plot
+```{r}
 ggplot(data = baseball2, aes(x = ERA, fill = IsNL)) +
   geom_density(alpha = 0.7) +
   facet_wrap(~IsWest) +
   labs(x = "ERA", fill = "League")
+```
 
 
+## Multilevel Model
+```{r}
+model2 <- lmer(ERA ~ IsNL + IsWest + (1 + IsWest | teamID), REML = FALSE, data = baseball2)
+summary(model2)
+```
+
+Based on the output of the model, the assocation between League and ERA does not differ based on Division. The correlation is strongly negative, with a value of -0.88, and IsNL1 is a significant variable in the model. IsWest, however, does not meet the criteria to be a significant variable in the model, as its t-value is not greater than |2|. The variance of the error terms is 0.24429.
